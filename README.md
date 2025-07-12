@@ -1,4 +1,4 @@
-# DS_Capstone_Template
+# DS Capstone Project
 Road to Safety: Data-Driven Insights for US Traffic Accidents
 Overview
 This project analyzes a comprehensive dataset of U.S. traffic accidents to identify the key infrastructure and environmental factors that contribute to accident severity. The goal is to provide the Department of Transportation (DOT) with actionable, data-driven recommendations to enhance road safety and optimize emergency response.
