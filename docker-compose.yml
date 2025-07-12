@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  spark-master:
+    image: bitnami/spark:3.5
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - "8080:8080"  # Spark master web UI
+    networks:
+      - spark-net
+
+  spark-worker-1:
+    image: bitnami/spark:3.5
+    container_name: spark-worker-1
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    networks:
+      - spark-net
+
+  jupyter:
+    image: jupyter/pyspark-notebook
+    container_name: spark-jupyter
+    ports:
+      - "8888:8888"
+    environment:
+      - PYSPARK_PYTHON=python3
+      - SPARK_MASTER=spark://spark-master:7077
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./requirements.txt:/tmp/requirements.txt
+    command: >
+      bash -c "
+      pip install -r /tmp/requirements.txt &&
+      start-notebook.sh"
+    networks:
+      - spark-net
+
+networks:
+  spark-net:
+    driver: bridge
